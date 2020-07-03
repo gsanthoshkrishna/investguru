@@ -1,57 +1,64 @@
 <!DOCTYPE HTML>
 <html>
 <head>  
-<script>
-window.onload = function () {
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Invest Guru</title>
+	<style>
+		.pair div {
+		
+		}
+	.progress-bar-vertical {
+		position: absolute;
+		
+		border: 2px solid green;
+		border-radius: 20px;
+		width: 35px;
+		min-height: 200px;
+		margin-left: 100px;
+		float: left;
+		display: -webkit-box; 
+		display: -ms-flexbox;  
+		display: -webkit-flex; 
+		display: flex;         
+		align-items: flex-end;
+		-webkit-align-items: flex-end; 
+		
+	  }
+	  
+	  .progress-bar-vertical .progress-bar {
+		width: 100%;
+		height: 0;
+		background-color: green;
+		-webkit-transition: height 0.6s ease;
+		-o-transition: height 0.6s ease;
+		transition: height 0.6s ease;
+	  }
+	
+		</style>
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 
-var chart = new CanvasJS.Chart("chartContainer", {
-	animationEnabled: true,
-	title:{
-		text: "Composition of Internet Traffic in North America"
-	},
-	axisX: {
-		interval: 1,
-		intervalType: "year",
-		valueFormatString: "YYYY"
-	},
-	axisY: {
-        gridThickness: 0,
-	},
-	toolTip: {
-		shared: true
-	},
-	legend: {
-		reversed: true,
-		verticalAlign: "center",
-		horizontalAlign: "right"
-	},
-	data: [{
-		type: "stackedColumn100",
-		name: "Real-Time",
-		xValueFormatString: "YYYY",
-		yValueFormatString: "#,##0\"%\"",
-		dataPoints: [
-			{ x: new Date(2010,0), y: 50 }
-		]
-	}, 
-	{
-		type: "stackedColumn100",
-		name: "Web Browsing",
-		xValueFormatString: "YYYY",
-		yValueFormatString: "#,##0\"%\"",
-		dataPoints: [
-			{ x: new Date(2010,0), y: 50 }
-		]
-	}
-	]
-});
-chart.render();
-
-}
-</script>
 </head>
 <body>
-<div id="chartContainer" style="height: 300px; width: 25%;"></div>
-<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+	<br>
+	<br>
+	<br>
+	
+	<div style="margin-left:80px ;">
+		<strong style="color: brown;">Invested Amount</strong> 
+	</div>
+	<br>
+
+
+	<div class="progress progress-bar-vertical"  >
+		<div class="progress-bar" role="progressbar" aria-valuenow="{{cur}}" aria-valuemin="0" aria-valuemax="100" style="height: {{cur}}%;">
+		  {{cur}}%
+		</div>
+		
+	</div>
+	</div>
 </body>
 </html>

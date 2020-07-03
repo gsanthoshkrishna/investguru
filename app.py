@@ -9,4 +9,4 @@ def initial():
     return render_template("index.html",cur=cur)
 if __name__ == "__main__":
     app.secret_key="dwqwfewfwqdqw"
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port="8222")

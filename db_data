@@ -1,2 +1,4 @@
 create table invest_data(name VARCHAR(50),value FLOAT,quantity INTEGER,target FLOAT,tag VARCHAR(50));
+use murthy;
+insert into invest_data values('test','20.0',4,22,'short');
 

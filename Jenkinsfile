@@ -1,13 +1,18 @@
 pipeline {
   agent any
-  	
+  environment{
+    tomail = "test"
+  }	
   stages {
     stage('test build') {
         steps {
-            sh 'git clone '
+            $tomail = 'updated'
             
         }
 	}
+  }
+  post{
+    emailext body: '', subject: 'test', to: '$tomail'
   }
   
  

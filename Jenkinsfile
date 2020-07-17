@@ -7,6 +7,7 @@ pipeline {
     stage('test build') {
         steps {
             echo "hi"
+            env.tomail = "gsanthoshkrishna@gmail.com"
             
         }
 	}

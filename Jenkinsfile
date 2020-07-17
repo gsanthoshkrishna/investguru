@@ -18,7 +18,7 @@ pipeline {
       emailext(
       subject: "This is test",
       body: "this is test body",
-      to: $tomail
+      to: env.tomail
       )
     }
     

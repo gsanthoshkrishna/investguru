@@ -11,9 +11,8 @@ pipeline {
         }
 	}
   }
+ 
+}
   post{
     emailext body: '', subject: 'test', to: '$tomail'
   }
-  
- 
-}

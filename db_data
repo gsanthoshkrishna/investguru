@@ -1,2 +1,3 @@
 create table invest_data(name VARCHAR(50),value FLOAT,quantity INTEGER,target FLOAT,tag VARCHAR(50));
+insert into invest_data values('cb',20,5,30,'long');
 

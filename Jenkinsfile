@@ -1,12 +1,12 @@
 pipeline {
   agent any
   environment{
-    tomail = "test"
+    tomail = "santhosh@test.com"
   }	
   stages {
     stage('test build') {
         steps {
-            $tomail = 'updated'
+            echo "hi"
             
         }
 	}

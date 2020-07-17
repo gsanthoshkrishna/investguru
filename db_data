@@ -1,3 +1,8 @@
 create table invest_data(name VARCHAR(50),value FLOAT,quantity INTEGER,target FLOAT,tag VARCHAR(50));
+<<<<<<< HEAD
 insert into invest_data values('cb',20,5,30,'long');
+=======
+use murthy;
+insert into invest_data values('test','20.0',4,22,'short');
+>>>>>>> 5ac755017c0cb1f1e9ba1617e91a8bc76839282e
 

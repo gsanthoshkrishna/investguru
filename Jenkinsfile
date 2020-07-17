@@ -7,7 +7,11 @@ pipeline {
     stage('test build') {
         steps {
             echo "hi"
-            env.tomail = "gsanthoshkrishna@gmail.com"
+            script {
+          withEnv(["tomail=gsanthoshkrishna@gmail.com"]) {
+            echo env.tomail // prints: FOO = newbar
+          }
+        }
             
         }
 	}

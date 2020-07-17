@@ -1,21 +1,17 @@
+tomail = "test@test.com"
 pipeline {
   agent any
-  environment{
-    tomail = "santhosh@test.com"
-  }	
   stages {
     stage('test build') {
         steps {
             echo "hi"
-            script {
-          withEnv(["tomail=gsanthoshkrishna@gmail.com"]) {
-            echo env.tomail // prints: FOO = newbar
-          }
-        }
+            tomail = "gsanthoshkrishna@gmail.com" // prints: FOO = newbar
+          
             
         }
+    }
 	}
-  }
+  
  
 
   post {

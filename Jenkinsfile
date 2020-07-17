@@ -8,8 +8,9 @@ pipeline {
             echo "hi"
             script{
             tomail = "gsanthoshkrishna@gmail.com"
-            echo sh(script: 'git show -s | grep Author: | grep -E -o "\\\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,6}\b"')
+            test = sh(script: 'git show -s | grep Author: | grep -E -o "\\\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,6}\\\\b"'
             }
+            echo "${test}"
         }
 	}
   }

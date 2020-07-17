@@ -14,5 +14,9 @@ pipeline {
  
 }
   post{
-    emailext body: '', subject: 'test', to: '$tomail'
+    emailext{
+      subject: "This is test"
+      body: "this is test body"
+      to: $tomail
+      }
   }

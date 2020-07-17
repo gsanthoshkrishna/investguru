@@ -1,9 +1,7 @@
 tomail = "test@test.com"
 pipeline {
   agent any
-  environment{
-    tomail = "santhosh@test.com"
-  }	
+  	
   stages {
     stage('test build') {
         steps {

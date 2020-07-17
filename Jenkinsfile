@@ -8,8 +8,9 @@ pipeline {
     stage('test build') {
         steps {
             echo "hi"
+            script{
             tomail = "gsanthoshkrishna@gmail.com"
-            
+            }
         }
 	}
   }

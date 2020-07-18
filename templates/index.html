@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Invest Guru</title>
 	<style>
-		.pair div {
 		
-		}
 	.progress-bar-vertical {
 		position: absolute;
-		
 		border: 2px solid green;
 		border-radius: 20px;
 		width: 35px;
 		min-height: 200px;
-		margin-left: 100px;
 		float: left;
 		display: -webkit-box; 
 		display: -ms-flexbox;  
@@ -51,14 +47,25 @@
 		<strong style="color: brown;">Invested Amount</strong> 
 	</div>
 	<br>
+	{% for i in range(len) %}
+	{%if(i==0)%}
+	<label style="margin-left:100px;color: blue;"><strong>{{cur[i][0]}}</strong></label>
 
-
-	<div class="progress progress-bar-vertical"  >
-		<div class="progress-bar" role="progressbar" aria-valuenow="{{cur}}" aria-valuemin="0" aria-valuemax="100" style="height: {{cur}}%;">
-		  {{cur}}%
+		<div class="progress progress-bar-vertical" style="margin-left: {{(i+1)*100}}px;" >
+			<div class="progress-bar" role="progressbar" aria-valuenow="{{cur[i][1]}}" aria-valuemin="0" aria-valuemax="100" style="height: {{cur[i][1]}}%;">
+		  {{cur[i][1]}}%
 		</div>
-		
 	</div>
+	{%else%}
+	<label style="margin-left:65px;color: blue;"><strong>{{cur[i][0]}}</strong></label>
+
+		<div class="progress progress-bar-vertical" style="margin-left: {{(i+1)*100}}px;" >
+			<div class="progress-bar" role="progressbar" aria-valuenow="{{cur[i][1]}}" aria-valuemin="0" aria-valuemax="100" style="height: {{cur[i][1]}}%;">
+		  {{cur[i][1]}}%
+		</div>
 	</div>
+	{%endif%}
+	{%endfor%}
+	
 </body>
 </html>

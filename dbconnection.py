@@ -6,7 +6,7 @@ def executeQuery():
                         password="Pass@123",        
                         database="murthy")       
     cur = db.cursor()
-    cur.execute("SELECT * FROM invest_data")
+    cur.execute("SELECT name,value,target FROM invest_data")
     res=cur.fetchall()
     return res
 

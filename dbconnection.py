@@ -8,5 +8,9 @@ def executeQuery():
     cur = db.cursor()
     cur.execute("SELECT name,value,target FROM invest_data")
     res=cur.fetchall()
-    return res
+    cur.execute("SELECT name,value,target FROM invest_data WHERE tag='short'")
+    short=cur.fetchall()
+    cur.execute("SELECT name,value,target FROM invest_data WHERE tag='long'")
+    lng=cur.fetchall()
+    return res,short,lng
 

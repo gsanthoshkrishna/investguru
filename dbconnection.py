@@ -1,9 +1,9 @@
 import pymysql
 
 def executeQuery():
-    db = pymysql.connect(host="localhost",    
+    db = pymysql.connect(host="mysql-server",    
                         user="root", 
-                        password="Sairf529*",        
+                        password="Pass@123",        
                         database="murthy")       
     cur = db.cursor()
     cur.execute("SELECT name,value,target FROM invest_data")

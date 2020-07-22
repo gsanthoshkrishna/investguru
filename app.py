@@ -20,5 +20,5 @@ def initial():
     avg_long=round(avg_long/len(lng))
     return render_template("index.html",cur=cur,len=len(cur),avg_lg=avg_long,avg_shr=avg_short,lg=ln,shr=sh)
 if __name__ == "__main__":
-    app.run()
-    #app.run(host="0.0.0.0", port="8222")
+    
+    app.run(host="0.0.0.0", port="8222")

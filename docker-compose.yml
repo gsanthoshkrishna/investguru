@@ -5,7 +5,7 @@ services:
     environment:
      - MYSQL_ROOT_PASSWORD=Pass@123
     volumes:
-     - /home/ubuntu/sqldata:/docker-entrypoint-initdb.d
+     - ./sqldata:/docker-entrypoint-initdb.d
   investguru:
     image: 'investguru'
     working_dir: /investguru

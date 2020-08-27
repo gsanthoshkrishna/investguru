@@ -14,3 +14,4 @@ services:
     ports:
      - 8084:8222
     entrypoint: ["python3", "app.py"]
+

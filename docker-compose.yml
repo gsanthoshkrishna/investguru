@@ -5,11 +5,13 @@ services:
     environment:
      - MYSQL_ROOT_PASSWORD=Pass@123
     volumes:
-     - /home/ubuntu/sqldata:/docker-entrypoint-initdb.d
+     - ./sqldata:/docker-entrypoint-initdb.d
   investguru:
     image: 'investguru'
     working_dir: /investguru
     depends_on:
      - mysql-server
     ports:
-     - 8123:8222
+     - 8084:8222
+    entrypoint: ["python3", "app.py"]
+

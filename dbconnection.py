@@ -17,7 +17,7 @@ def executeQuery():
     short=cur.fetchall()
     cur.execute("SELECT name,value,target FROM invest_data WHERE tag='long'")
     lng=cur.fetchall()
-    cur.execute("SELECT name,value,target FROM invest_data WHERE tag='long'")
+    cur.execute("SELECT name,value,target FROM invest_data WHERE tag='AXIS-ELEC-EMI'")
     axisemi=cur.fetchall()
     return res,short,lng,axisemi
 def insertDailyData():

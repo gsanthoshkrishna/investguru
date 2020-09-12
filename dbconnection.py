@@ -6,7 +6,7 @@ from datetime import timedelta
 import urllib.request
 
 def executeQuery():
-    db = pymysql.connect(host="172.21.0.2",    
+    db = pymysql.connect(host="172.18.0.2",    
                         user="root", 
                         password="Pass@123",        
                         database="murthy")       
@@ -23,11 +23,11 @@ def insertDailyData():
     print(latestDate.date() > (datetime.now()).date())
     print((datetime.now()).date())
     print('--------------------')
-    if int(latestDate.strftime('%H')) < 23 :
+    if int(latestDate.strftime('%H')) < 20 :
         print('exiting as < 8PM')
         return
 
-    db = pymysql.connect(host="172.21.0.2",    
+    db = pymysql.connect(host="172.18.0.2",    
                         user="root", 
                         password="Pass@123",        
                         database="murthy")       

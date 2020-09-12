@@ -6,6 +6,7 @@ services:
      - MYSQL_ROOT_PASSWORD=Pass@123
     volumes:
      - ./sqldata:/docker-entrypoint-initdb.d
+     - ./data:/var/lib/mysql
   investguru:
     image: 'investguru'
     working_dir: /investguru

@@ -25,10 +25,15 @@ def initial():
         ln.append([i[0].upper(),round(((i[1])/i[2])*100)])
     avg_long=round(avg_long/len(lng))
     for i in axisemi:
-        avg_long+=((i[1])/i[2])*100
+        avg_axisemi+=((i[1])/i[2])*100
         ae.append([i[0].upper(),round(((i[1])/i[2])*100)])
-    avg_axisemi=round(avg_long/len(axisemi))
-    return render_template("index.html",cur=cur,len=len(cur),avg_lg=avg_long,avg_shr=avg_short,avg_axisemi=avg_axisemi,lg=ln,shr=sh,ae=ae)
+    avg_axisemi=round(avg_axisemi/len(axisemi))
+    print("------------------------Printing values-------------------------")
+    print(axisemi)
+    print("------------------------Printing values-------------------------")
+
+
+    return render_template("index.html",ae=axisemi)
 if __name__ == "__main__":
     #app.secret_key="dwqwfewfwqdqw"
     app.run(host="0.0.0.0", port="8222")

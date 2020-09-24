@@ -17,7 +17,7 @@ def executeQuery():
     short=cur.fetchall()
     cur.execute("SELECT name,value,target FROM invest_data WHERE tag='long'")
     lng=cur.fetchall()
-    cur.execute("SELECT name,value,target FROM invest_data WHERE tag='AXIS-ELEC-EMI'")
+    cur.execute("SELECT tag as name,sum(value) as 'value',sum(target) as 'target' FROM invest_data group by tag")
     axisemi=cur.fetchall()
     return res,short,lng,axisemi
 def insertDailyData():
@@ -29,10 +29,7 @@ def insertDailyData():
     print(latestDate.date() > (datetime.now()).date())
     print((datetime.now()).date())
     print('--------------------')
-    if int(latestDate.strftime('%H')) < 20 :
-        print('exiting as < 8PM')
-        return
-
+    
     db = pymysql.connect(host="172.18.0.2",    
                         user="root", 
                         password="Pass@123",        
@@ -47,10 +44,19 @@ def insertDailyData():
     else:
         latestDate = latestDate + timedelta(days=-8)
     latestDate = latestDate + timedelta(days=1)
-    if latestDate.date() > (datetime.now()).date():
-        print('returning as > date')
-        return 
+
+    if latestDate.date() < (datetime.now()).date():
+        print('inserting history')
+        #return
+    else:
+        if int(latestDate.strftime('%H')) < 16 :
+            print('exiting as < 8PM')
+            return
+
     #Skip latest data is yesterdays.
+    
+    
+    
     dt_obj = latestDate#datetime.strptime(latestDate, "%Y-%m-%d %H:%M:%S")
     zip_file = download_zip(dt_obj)
     if(zip_file == 'NoData'):

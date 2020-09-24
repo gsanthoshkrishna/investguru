@@ -9,14 +9,15 @@ app.config['SECRET_KEY']='sample'
 
 @app.route("/")
 def initial():
-    qry = "SELECT tag as name,sum(value) as 'value',sum(target) as 'target' FROM invest_data  group by tag"
+    #qry = "SELECT tag as name,sum(value) as 'value',sum(target) as 'target' FROM invest_data  group by tag"
+    qry = "select name,target_perc_reached as value,target from tr_targets"
     axisemi=executeQuery(qry)
     ae=[]
     avg_axisemi=0
     insertDailyData()
     for i in axisemi:
-        avg_axisemi+=((i[1])/i[2])*100
-        ae.append([i[0].upper(),round(((i[1])/i[2])*100)])
+        avg_axisemi = i[1]
+        ae.append([i[0].upper(),i[1]])
     avg_axisemi=round(avg_axisemi/len(axisemi))
     print("------------------------Printing values-------------------------")
     print(axisemi)
@@ -102,7 +103,7 @@ def updateTargets():
             print("change values")
             print(changeValue)
             print("change value for "+targetItem[0]+":"+str(changeValue[0]))
-            qry = "update tr_targets set amt_changed = "+str(changeValue[0])+" where name = '"+targetItem[0]+"'"
+            qry = "update tr_targets set amt_changed = "+str(changeValue[0])+",target_perc_reached = ("+str(changeValue[0])+"/target)*100 where name = '"+targetItem[0]+"'"
             #TODO update table 
             print("updating change in tr_target:"+qry)
             updateQuery(qry)

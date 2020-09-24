@@ -5,7 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 import urllib.request
 
-def executeQuery():
+def executeQueryAll():
     db = pymysql.connect(host="172.18.0.2",    
                         user="root", 
                         password="Pass@123",        
@@ -20,6 +20,18 @@ def executeQuery():
     cur.execute("SELECT tag as name,sum(value) as 'value',sum(target) as 'target' FROM invest_data group by tag")
     axisemi=cur.fetchall()
     return res,short,lng,axisemi
+    
+def executeQuery(qry):
+    db = pymysql.connect(host="172.18.0.2",    
+                        user="root", 
+                        password="Pass@123",        
+                        database="murthy")       
+    cur = db.cursor()
+    cur.execute(qry)
+    axisemi=cur.fetchall()
+    return axisemi
+
+
 def insertDailyData():
     latestDate = datetime.now()
     print(latestDate.strftime('%H'))
@@ -89,6 +101,23 @@ def insertDailyData():
         
     print(cur.rowcount, "record inserted.")
 
+def updateQuery(qry):
+    db = pymysql.connect(host="172.18.0.2",    
+                        user="root", 
+                        password="Pass@123",        
+                        database="murthy")
+    cur=db.cursor()
+    cur.execute(qry)
+    db.commit()
+    print(cur.rowcount, "record inserted.")
+    return
+
+def insertQuery(qry,valuesList):
+    cur=db.cursor()
+    cur.execute(qry+" values(%s)",valuesList)
+    db.commit()
+    print(cur.rowcount, "record inserted.")
+    return
 
 def download_zip(from_date):
     x = from_date #datetime.datetime.now()

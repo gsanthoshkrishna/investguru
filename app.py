@@ -112,6 +112,10 @@ def updateTargets():
     #No need to run everytime place somewhere
     updateScripts()
 
+def getPercChange(open_val,close_val):
+    perc_change = ((close_val - open_val)/open_val)*100
+    return perc_change
+
 if __name__ == "__main__":
     #app.secret_key="dwqwfewfwqdqw"
     app.run(host="0.0.0.0", port="8222")

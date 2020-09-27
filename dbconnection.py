@@ -71,6 +71,7 @@ def insertDailyData():
     
     dt_obj = latestDate#datetime.strptime(latestDate, "%Y-%m-%d %H:%M:%S")
     zip_file = download_zip(dt_obj)
+    #If no data available/ market holiday. insert one record.
     if(zip_file == 'NoData'):
         sql = "INSERT INTO history_data(TIMESTAMP) VALUES(%s)"
         cur=db.cursor()
@@ -100,6 +101,10 @@ def insertDailyData():
     db.commit()
         
     print(cur.rowcount, "record inserted.")
+    cur=db.cursor()
+    sql = "update history_data set col2 = TRUNCATE(((CLOSE-OPEN)/OPEN)*100,2) WHERE TIMESTAMP='"+dt_obj.strftime('%d-%b-%Y')+"'"
+    cur.execute(sql)
+    db.commit()
 
 def updateQuery(qry):
     db = pymysql.connect(host="172.18.0.2",    
@@ -126,7 +131,8 @@ def download_zip(from_date):
     filename = "cm"+str(date_of_file)+month_of_file+str(x.year)+"bhav.csv.zip"
     print("Downloading report file "+filename)
     print(filename)
-    url = "https://archives.nseindia.com/content/historical/EQUITIES/"+str(x.year)+"/"+month_of_file+"/"+filename
+    url = "https://www1.nseindia.com/content/historical/EQUITIES/"+str(x.year)+"/"+month_of_file+"/"+filename
+    #url = "https://archives.nseindia.com/content/historical/EQUITIES/"+str(x.year)+"/"+month_of_file+"/"+filename
     save_path = "raw_data/"+filename
     try:
         resp = urllib.request.urlopen(url,timeout=30)

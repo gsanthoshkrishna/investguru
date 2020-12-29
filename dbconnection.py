@@ -1,12 +1,18 @@
 import csv
-import pymysql
+import pymysql,json
 from zipfile import ZipFile
 from datetime import datetime
 from datetime import timedelta
 import urllib.request
 
+with open('conf.json', 'r') as f:
+    conf_dict = json.load(f)
+
+sqlserver = conf_dict['sqlhost']
+print("SQL:"+sqlserver)
+
 def executeQueryAll():
-    db = pymysql.connect(host="172.18.0.2",    
+    db = pymysql.connect(host=sqlserver,    
                         user="root", 
                         password="Pass@123",        
                         database="murthy")       
@@ -22,7 +28,7 @@ def executeQueryAll():
     return res,short,lng,axisemi
     
 def executeQuery(qry):
-    db = pymysql.connect(host="172.18.0.2",    
+    db = pymysql.connect(host=sqlserver,    
                         user="root", 
                         password="Pass@123",        
                         database="murthy")       
@@ -50,7 +56,7 @@ def insertDailyData():
     print((datetime.now()).date())
     print('--------------------')
     
-    db = pymysql.connect(host="172.18.0.2",    
+    db = pymysql.connect(host=sqlserver,    
                         user="root", 
                         password="Pass@123",        
                         database="murthy")       
@@ -135,7 +141,7 @@ def insertDailyData():
     
 
 def updateQuery(qry):
-    db = pymysql.connect(host="172.18.0.2",    
+    db = pymysql.connect(host=sqlserver,    
                         user="root", 
                         password="Pass@123",        
                         database="murthy")

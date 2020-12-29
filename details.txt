@@ -1,0 +1,10 @@
+update percentage reached:
+updateTargets method will update next target date and will update percentage changed.
+
+
+getPercChange:
+This method will get the percentage change. - never used this method.
+
+tr_trades table will have the sell/buy orders transactions.
+script_details table will have script wise details with average cost taken.
+updateScripts will update the script_details with average value based on the new transactions.

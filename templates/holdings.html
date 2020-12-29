@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+          <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+
+</head>
+<body>
+<h2>Customer Info</h2>
+<input type="text" id="livebox">
+<table id = "datalist">
+  
+</table>
+
+</body>
+
+<script>
+    $(document).ready(function(){
+        $("#livebox").on("input",function(e){
+          $("#datalist").empty();
+            $.ajax({
+                method:"post",
+                url:"/getholdings",
+                data:{text:$("#livebox").val()},
+                success:function(res){
+                    var data = "<tr><th>ScriptID</th><th>Equity</th><th>Quantity</th><th>Avg Prc</th><th>LTP</th><th>Invested Value</th><th>Current Value</th><th>Perc Changed</th><th>Amount Changed</th></tr>";
+                    $.each(res,function(index,value){
+                        data +="<tr><td>"+value[0]+"</td><td>"+value[1]+"</td><td>"+value[2]+"</td><td>"+value[3]+"</td><td>"+value[4]+"</td><td>"+value[5]+"</td><td>"+value[6]+"</td><td>"+value[7]+"</td><td>"+value[8]+"</td></tr>";
+                    });
+                    data += "</ul>"
+                    $("#datalist").append(data);
+                }
+            });
+        });
+    });
+</script>
+</html>
+
+
+
+

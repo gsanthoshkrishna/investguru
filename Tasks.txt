@@ -1,0 +1,9 @@
+Done - insert into a today_values table while inserting in history_data by removing all the records every time
+Done - update current value for the table script_details based on table today_values
+Done - Calculate perc changed and amount changed in script_details.
+Next(p0) - Plan for DR.
+Next(p2) - Update high and low by comaparing. If current_value < low value update low value and curr_value > high update high.
+Next(p1) - Update the current holdings in script_details with separated view for me and general.
+Next(p0) - Add target reached/%target reached. indicator in holdings page.
+Next(p3) - Add weightage/load concept to scripts.
+Next(p2) - Add coloring to background based on target reached(Red, Yellow, Green,)(Basketball dribling concept fast, slow blocking goal pngs ;) )

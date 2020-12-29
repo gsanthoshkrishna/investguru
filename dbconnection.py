@@ -31,6 +31,14 @@ def executeQuery(qry):
     axisemi=cur.fetchall()
     return axisemi
 
+def getHoldings(script):
+    #TODO change the below query for scripts
+    srch_qry = "select name,name,units,avg_value,current_value,units * avg_value as invested,units * current_value current_value,perc_change,amt_change from script_details where name like '%"+script+"%' "
+    if script == "nothing":
+        srch_qry = "select name,name,units,avg_value,current_value,units * avg_value as invested,units * current_value current_value,perc_change,amt_change from script_details"
+    print("srchQry:"+srch_qry)
+    return executeQuery(srch_qry)
+
 
 def insertDailyData():
     latestDate = datetime.now()
@@ -99,12 +107,32 @@ def insertDailyData():
         cur.execute(sql,row)
         
     db.commit()
-        
+
+    #Inserting data same into    
     print(cur.rowcount, "record inserted.")
     cur=db.cursor()
     sql = "update history_data set col2 = TRUNCATE(((CLOSE-OPEN)/OPEN)*100,2) WHERE TIMESTAMP='"+dt_obj.strftime('%d-%b-%Y')+"'"
     cur.execute(sql)
     db.commit()
+
+    sql = "truncate today_values"
+    cur.execute(sql)
+    db.commit()
+
+    sql = "insert into today_values select * from history_data WHERE TIMESTAMP='"+dt_obj.strftime('%d-%b-%Y')+"'"
+    cur.execute(sql)
+    db.commit()
+
+    sql = "update script_details sd, today_values tv set sd.current_value = tv.CLOSE where tv.SYMBOL = sd.name AND tv.SERIES = 'EQ'"
+    cur.execute(sql)
+    db.commit()
+
+    #Updating %ch in script details.
+    sql = 'update script_details set perc_change = ((current_value - avg_value)/ avg_value)*100 , amt_change = (current_value - avg_value)*units'
+    cur.execute(sql)
+    db.commit()
+
+    
 
 def updateQuery(qry):
     db = pymysql.connect(host="172.18.0.2",    
@@ -114,7 +142,7 @@ def updateQuery(qry):
     cur=db.cursor()
     cur.execute(qry)
     db.commit()
-    print(cur.rowcount, "record inserted.")
+    print(cur.rowcount, "record updated.")
     return
 
 def insertQuery(qry,valuesList):
@@ -170,3 +198,4 @@ def getCSVData(csvfile):
         for row in reader:
             history_data.append(row)
         return history_data
+

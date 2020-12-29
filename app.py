@@ -1,9 +1,11 @@
-from flask import Flask, render_template, flash, request, url_for, redirect,session
+from flask import Flask, render_template, flash, request, url_for, redirect,session,jsonify 
 from dbconnection import executeQuery
 from dbconnection import updateQuery
+from raghucomms import searchUser
 from datetime import timedelta
 from datetime import datetime
 from dbconnection import insertDailyData
+from dbconnection import getHoldings
 app = Flask(__name__)
 app.config['SECRET_KEY']='sample'
 
@@ -25,6 +27,35 @@ def initial():
 
 
     return render_template("index.html",ae=axisemi)
+@app.route("/raghucomms")
+def raghucomms():
+    return render_template("raghucommscustomer.html")
+
+@app.route("/holdings")
+def holdings():
+    return render_template("holdings.html")
+
+@app.route("/getholdings",methods=["POST","GET"])
+def getholdings():
+    searchbox = request.form.get("text")
+    if(searchbox == None):
+        searchbox = "nothing"
+
+    res=getHoldings(searchbox)
+    print(res)
+    return jsonify(res)
+
+
+@app.route("/livesearch",methods=["POST","GET"])
+def livesearch():
+    searchbox = request.form.get("text")
+    if(searchbox == None):
+        searchbox = "nothing"
+
+    res=searchUser(searchbox)
+    print(res)
+    return jsonify(res)
+
 
 @app.route("/initialbackup")
 def initialbackup():
@@ -62,7 +93,7 @@ def gettargets():
     return render_template("targets.html")
 
 def updateScripts():
-    qry = "select name,tag,sum(value)/count(value) as avg_value,sum(quantity) as units from tr_trades group by name,tag"
+    qry = "select name,tag,sum(value)/sum(quantity) as avg_value,sum(quantity) as units from tr_trades group by name,tag"
     avgList = executeQuery(qry)
     for avgItem in avgList:
         qry = "update script_details set avg_value = "+str(avgItem[2])+", units="+str(avgItem[3])+" where name = '"+avgItem[0]+"' and tags='"+avgItem[1]+"'"

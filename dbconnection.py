@@ -37,11 +37,13 @@ def executeQuery(qry):
     axisemi=cur.fetchall()
     return axisemi
 
-def getHoldings(script):
+def getHoldings(script,sort_key):
     #TODO change the below query for scripts
-    srch_qry = "select name,name,units,avg_value,current_value,units * avg_value as invested,units * current_value current_value,perc_change,amt_change from script_details where name like '%"+script+"%' "
+    srch_qry = "select sd.name,sd.name,sd.units,sd.avg_value,sd.current_value,ROUND(sd.units * sd.avg_value,2) as invested,ROUND(sd.units * sd.current_value,2) tot_current_value,sd.perc_change,sd.amt_change,tr.target_perc_reached from script_details sd , tr_targets tr where sd.name = tr.script_id and sd.name like '%"+script+"%' order by "+sort_key+" desc"
+    if script == "pending":
+        srch_qry = "select name,quantity,price,current_value,notes from pending_trades"
     if script == "nothing":
-        srch_qry = "select name,name,units,avg_value,current_value,units * avg_value as invested,units * current_value current_value,perc_change,amt_change from script_details"
+        srch_qry = "select sd.name,sd.name,sd.units,sd.avg_value,sd.current_value,ROUND(sd.units * sd.avg_value,2) as invested,ROUND(sd.units * sd.current_value,2) tot_current_value,sd.perc_change,sd.amt_change,tr.target_perc_reached from script_details sd , tr_targets tr where sd.name = tr.script_id  order by "+sort_key+" desc"
     print("srchQry:"+srch_qry)
     return executeQuery(srch_qry)
 
@@ -135,6 +137,10 @@ def insertDailyData():
 
     #Updating %ch in script details.
     sql = 'update script_details set perc_change = ((current_value - avg_value)/ avg_value)*100 , amt_change = (current_value - avg_value)*units'
+    cur.execute(sql)
+    db.commit()
+
+    sql = 'UPDATE script_details SET low_value = CASE WHEN current_value < low_value THEN current_value ELSE low_value END, high_value = CASE WHEN current_value > high_value THEN current_value ELSE high_value END'
     cur.execute(sql)
     db.commit()
 

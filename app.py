@@ -16,7 +16,7 @@ def initial():
     axisemi=executeQuery(qry)
     ae=[]
     avg_axisemi=0
-    insertDailyData()
+    #insertDailyData()
     for i in axisemi:
         avg_axisemi = i[1]
         ae.append([i[0].upper(),i[1]])
@@ -33,15 +33,19 @@ def raghucomms():
 
 @app.route("/holdings")
 def holdings():
-    return render_template("holdings.html")
+    pendings = getHoldings("pending","NA")
+    return render_template("holdings.html",pendings=pendings)
 
 @app.route("/getholdings",methods=["POST","GET"])
 def getholdings():
     searchbox = request.form.get("text")
+    sort_key = request.form.get("srt")
+    #push the code with sort keyword to identify the sort column
+    print(sort_key)
     if(searchbox == None):
         searchbox = "nothing"
 
-    res=getHoldings(searchbox)
+    res=getHoldings(searchbox,sort_key)
     print(res)
     return jsonify(res)
 
@@ -68,7 +72,7 @@ def initialbackup():
     for i in res:
         cur.append([i[0].upper(),round(((i[1])/i[2])*100)])
     print(cur)
-    insertDailyData()
+    #insertDailyData()
     for i in short:
         avg_short+=((i[1])/i[2])*100
         sh.append([i[0].upper(),round(((i[1])/i[2])*100)])
@@ -86,11 +90,17 @@ def initialbackup():
     print("------------------------Printing values-------------------------")
     return render_template("index.html",ae=axisemi)
 
+@app.route("/updateDailyData")
+def updateDailyData():
+    insertDailyData()
+    return render_template("targets.html",page_data="daily data updated successfully")
+
+
 @app.route("/targets")
 def gettargets():
     print("reached targets page")
     updateTargets()
-    return render_template("targets.html")
+    return render_template("targets.html",page_data="targets updated successfully")
 
 def updateScripts():
     qry = "select name,tag,sum(value)/sum(quantity) as avg_value,sum(quantity) as units from tr_trades group by name,tag"

@@ -1,8 +1,13 @@
 Done - insert into a today_values table while inserting in history_data by removing all the records every time
 Done - update current value for the table script_details based on table today_values
 Done - Calculate perc changed and amount changed in script_details.
-Next(p0) - Plan for DR.
-Next(p2) - Update high and low by comaparing. If current_value < low value update low value and curr_value > high update high.
+InProgress(p0) - Plan for DR.
+                    As of now save the downloaded zip files of nse data in raw_data folder.
+                    Use this as DR to restore the nse daily data.
+                    Need to plan to save these zip file permanently and archiving old zip files.
+Done - Update high and low by comaparing. If current_value < low value update low value and curr_value > high update high.
+            used below command to update low and high values.
+            UPDATE script_details SET low_value = CASE WHEN current_value < low_value THEN current_value ELSE low_value
 Next(p1) - Update the current holdings in script_details with separated view for me and general.
 Next(p0) - Add target reached/%target reached. indicator in holdings page.
 Next(p3) - Add weightage/load concept to scripts.

@@ -24,6 +24,16 @@ tr:nth-child(even) {
 <body>
 <h2>Customer Info</h2>
 <input type="text" id="livebox">
+
+<label>SortBy:</label>
+
+<select name="sortcol" id="sortcol">
+  <option value="name">SCRIPT</option>
+  <option value="perc_change">%Change</option>
+  <option value="amt_change">AmountChanged</option>
+  <option value="tot_current_value">TotalValue</option>
+</select>
+
 <table id = "datalist">
   
 </table>
@@ -37,11 +47,11 @@ tr:nth-child(even) {
             $.ajax({
                 method:"post",
                 url:"/getholdings",
-                data:{text:$("#livebox").val()},
+                data:{text:$("#livebox").val(),srt:$("#sortcol").val()},
                 success:function(res){
-                    var data = "<tr><th>ScriptID</th><th>Equity</th><th>Quantity</th><th>Avg Prc</th><th>LTP</th><th>Invested Value</th><th>Current Value</th><th>Perc Changed</th><th>Amount Changed</th></tr>";
+                    var data = "<tr><th>ScriptID</th><th>Equity</th><th>Quantity</th><th>Avg Prc</th><th>LTP</th><th>Invested Value</th><th>Current Value</th><th>Perc Changed</th><th>Amount Changed</th><th>Target Reached(%)</th></tr>";
                     $.each(res,function(index,value){
-                        data +="<tr><td>"+value[0]+"</td><td>"+value[1]+"</td><td>"+value[2]+"</td><td>"+value[3]+"</td><td>"+value[4]+"</td><td>"+value[5]+"</td><td>"+value[6]+"</td><td>"+value[7]+"</td><td>"+value[8]+"</td></tr>";
+                        data +="<tr><td>"+value[0]+"</td><td>"+value[1]+"</td><td>"+value[2]+"</td><td>"+value[3]+"</td><td>"+value[4]+"</td><td>"+value[5]+"</td><td>"+value[6]+"</td><td>"+value[7]+"</td><td>"+value[8]+"</td><td>"+value[9]+"</td></tr>";
                     });
                     data += "</ul>"
                     $("#datalist").append(data);
@@ -50,6 +60,55 @@ tr:nth-child(even) {
         });
     });
 </script>
+
+<script>
+  $(document).ready(function(){
+      $("#sortcol").change("select",function(e){
+        $("#datalist").empty();
+          $.ajax({
+              method:"post",
+              url:"/getholdings",
+              data:{text:$("#livebox").val(),srt:$("#sortcol").val()},
+              success:function(res){
+                  var data = "<tr><th>ScriptID</th><th>Equity</th><th>Quantity</th><th>Avg Prc</th><th>LTP</th><th>Invested Value</th><th>Current Value</th><th>Perc Changed</th><th>Amount Changed</th><th>Target Reached(%)</th></tr>";
+                  $.each(res,function(index,value){
+                      data +="<tr><td>"+value[0]+"</td><td>"+value[1]+"</td><td>"+value[2]+"</td><td>"+value[3]+"</td><td>"+value[4]+"</td><td>"+value[5]+"</td><td>"+value[6]+"</td><td>"+value[7]+"</td><td>"+value[8]+"</td><td>"+value[9]+"</td></tr>";
+                  });
+                  data += "</ul>"
+                  $("#datalist").append(data);
+              }
+          });
+      });
+  });
+</script>
+<br>
+<p>Pending Scripts</p>
+<script>
+  $(document).ready(function(){
+      $("#sortcol").change("select",function(e){
+        $("#datalist").empty();
+          $.ajax({
+              method:"post",
+              url:"/getholdings",
+              data:{text:"pending",srt:"NA"},
+              success:function(res){
+                  var data = "<tr><th>ScriptID</th><th>Quantity</th><th>price</th><th>LTP</th><th>Note</th></tr>";
+                  $.each(res,function(index,value){
+                      data +="<tr><td>"+value[0]+"</td><td>"+value[1]+"</td><td>"+value[2]+"</td><td>"+value[3]+"</td><td>"+value[4]+"</td></tr>";
+                  });
+                  data += "</ul>"
+                  $("#datalist").append(data);
+              }
+          });
+      });
+  });
+</script>
+  <table>
+  <tr><th>Script</th><th>Quantity</th><th>Price</th><th>LTP</th><th>Notes</th></tr>    
+  {% for pending in pendings %}
+    <tr><td>{{ pending[0] }}</td><td>{{ pending[1] }}</td><td>{{ pending[2] }}</td><td>{{ pending[3] }}</td><td>{{ pending[4] }}</td></tr>
+  {% endfor %}
+</table>
 </html>
 
 

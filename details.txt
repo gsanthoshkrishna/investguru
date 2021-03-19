@@ -8,3 +8,17 @@ This method will get the percentage change. - never used this method.
 tr_trades table will have the sell/buy orders transactions.
 script_details table will have script wise details with average cost taken.
 updateScripts will update the script_details with average value based on the new transactions.
+
+
+
+query to get daily count in the month
+--------------------------------------
+select TIMESTAMP,count(*) from history_data where timestamp like '%JAN%'
+group by TIMESTAMP;
+
+
+insert query for the new transaction.
+-----------------------------------------
+insert into script_details values('RIIL',406,406,406,100,0,0,'ICICI','OPEN',340,null);
+insert into tr_targets values('AMBIKCO',20,1120,'2021-01-30','ONCE','AMOUNT','BY MAHENDER','2021-01-13','OPEN',21,0,NULL,NULL,NULL,NULL,'AMBIKCO');
+

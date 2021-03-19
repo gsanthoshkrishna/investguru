@@ -39,11 +39,11 @@ def executeQuery(qry):
 
 def getHoldings(script,sort_key):
     #TODO change the below query for scripts
-    srch_qry = "select sd.name,sd.name,sd.units,sd.avg_value,sd.current_value,ROUND(sd.units * sd.avg_value,2) as invested,ROUND(sd.units * sd.current_value,2) tot_current_value,sd.perc_change,sd.amt_change,tr.target_perc_reached from script_details sd , tr_targets tr where sd.name = tr.script_id and sd.name like '%"+script+"%' order by "+sort_key+" desc"
+    srch_qry = "select sd.name,sd.name,sd.units,sd.avg_value,sd.current_value,ROUND(sd.units * sd.avg_value,2) as invested,ROUND(sd.units * sd.current_value,2) tot_current_value,sd.perc_change,sd.amt_change,tr.perc_changed from script_details sd , tr_targets tr where sd.script_id = tr.target_id and sd.name like '%"+script+"%' order by "+sort_key+" desc"
     if script == "pending":
         srch_qry = "select name,quantity,price,current_value,notes from pending_trades"
     if script == "nothing":
-        srch_qry = "select sd.name,sd.name,sd.units,sd.avg_value,sd.current_value,ROUND(sd.units * sd.avg_value,2) as invested,ROUND(sd.units * sd.current_value,2) tot_current_value,sd.perc_change,sd.amt_change,tr.target_perc_reached from script_details sd , tr_targets tr where sd.name = tr.script_id  order by "+sort_key+" desc"
+        srch_qry = "select sd.name,sd.name,sd.units,sd.avg_value,sd.current_value,ROUND(sd.units * sd.avg_value,2) as invested,ROUND(sd.units * sd.current_value,2) tot_current_value,sd.perc_change,sd.amt_change,tr.perc_changed from script_details sd , tr_targets tr where sd.script_id = tr.target_id  order by "+sort_key+" desc"
     print("srchQry:"+srch_qry)
     return executeQuery(srch_qry)
 
@@ -100,6 +100,13 @@ def insertDailyData():
     
     print('unzipping file')
     csvfile = unzipcsv(zip_file)
+    if(csvfile == 'NoFile'):
+        sql = "INSERT INTO history_data(TIMESTAMP) VALUES(%s)"
+        cur=db.cursor()
+        cur.execute(sql,dt_obj.strftime('%d-%b-%Y'))
+        db.commit()
+        print(cur.rowcount, "record inserted.")
+        return
     cur.close()
 
 
@@ -136,7 +143,7 @@ def insertDailyData():
     db.commit()
 
     #Updating %ch in script details.
-    sql = 'update script_details set perc_change = ((current_value - avg_value)/ avg_value)*100 , amt_change = (current_value - avg_value)*units'
+    sql = 'update script_details set perc_change = ROUND(((current_value - avg_value)/ avg_value)*100,2) , amt_change = ROUND((current_value - avg_value)*units,2)'
     cur.execute(sql)
     db.commit()
 
@@ -144,6 +151,9 @@ def insertDailyData():
     cur.execute(sql)
     db.commit()
 
+    sql = 'update tr_targets tr JOIN script_details sd on tr.target_id = sd.script_id set tr.perc_changed = sd.perc_change'
+    cur.execute(sql)
+    db.commit()
     
 
 def updateQuery(qry):
@@ -183,8 +193,10 @@ def download_zip(from_date):
     except Exception as e:
         if str(e).find('FileNotFoundError'):
             print("file not found exception"+str(e))
-            return 'NoData'
-            
+            print("URL:"+url)
+            #return 'NoData-skipped-as doing manual download'
+            #Skipping as doing manual download
+            return save_path
     
     return save_path
 
@@ -193,9 +205,13 @@ def unzipcsv(filename):
     import zipfile
     csvfile = filename.replace('.zip','')
     print("exctracting zip file "+filename)
-    with zipfile.ZipFile(filename, 'r') as zip_ref:
-        zip_ref.extractall("raw_data")
-    
+    try:
+        with zipfile.ZipFile(filename, 'r') as zip_ref:
+            zip_ref.extractall("raw_data")
+    except Exception as e:
+        if str(e).find('FileNotFoundError'):
+            print("file not found exception"+str(e))
+            return "NoFile"
     print("Extracted csv"+csvfile)
     return csvfile
 
